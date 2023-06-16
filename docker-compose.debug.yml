@@ -7,7 +7,7 @@ services:
       context: ./frontend
       dockerfile: debug.dockerfile
     command: ["npm", "run", "start"]
-    container_name: mean_angular
+    container_name: amoa_angular
     volumes:
       - ./frontend/src:/app/src
     ports:
@@ -22,7 +22,7 @@ services:
     build: # specify the directory of the Dockerfile
       context: ./api
       dockerfile: debug.dockerfile
-    container_name: mean_express
+    container_name: amoa_express
     volumes:
       - ./api:/api
     ports:
@@ -41,7 +41,7 @@ services:
 
   database: # name of the third service
     image: mongo # specify image to build container from
-    container_name: mean_mongo
+    container_name: amoa_mongo
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin-user
       - MONGO_INITDB_ROOT_PASSWORD=admin-password

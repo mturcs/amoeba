@@ -1,22 +1,21 @@
 <div class="panel panel-default">
   <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-sm-4">
-      <h2 style="color: silver">Messages</h2>
+      <h2 style="color: silver">Amőba</h2>
     </div>
 
   </div>
   <div>
     <div class="row-sm-1">
       <div class="row">
-        <mat-chip-listbox aria-label="Message selection" >
-          <mat-chip-option style="background-color: orange">Technical failure</mat-chip-option>
-          <mat-chip-option style="background-color: tomato">Quality</mat-chip-option>
-          <mat-chip-option style="background-color: skyblue">Internal Logistic</mat-chip-option>
-          <mat-chip-option style="background-color: silver">Other</mat-chip-option>
-          <mat-chip-option >Hello</mat-chip-option>
-        </mat-chip-listbox>
-
-
+        <svg>
+          <ng-container *ngFor="let line of linesHorizontal">
+            <line [attr.x1]="line.x1" [attr.y1]="line.y1" [attr.x2]="line.x2" [attr.y2]="line.y2" stroke="red"/>
+          </ng-container>
+          <ng-container *ngFor="let line of linesVertical">
+            <line [attr.x1]="line.x1" [attr.y1]="line.y1" [attr.x2]="line.x2" [attr.y2]="line.y2" stroke="red"/>
+          </ng-container>
+        </svg>
       </div>
 
 
@@ -30,5 +29,13 @@
 
 
 </div>
+<svg style="width: available; height: available">
+  <ng-container *ngFor="let line of linesHorizontal">
+    <line [attr.x1]="line.x1" [attr.y1]="line.y1" [attr.x2]="line.x2" [attr.y2]="line.y2" stroke="red"/>
+  </ng-container>
+  <ng-container *ngFor="let line of linesVertical">
+    <line [attr.x1]="line.x1" [attr.y1]="line.y1" [attr.x2]="line.x2" [attr.y2]="line.y2" stroke="red"/>
+  </ng-container>
+</svg>
 
 
