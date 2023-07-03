@@ -8,16 +8,53 @@
   <div>
     <div class="row-sm-1">
       <div class="row">
-        <svg>
-          <ng-container *ngFor="let line of linesHorizontal">
+
+
+
+
+
+        <svg  #svgElement  style="width: 900px; height: 900px" (mousemove)="onMouseMove($event)" >
+
+          <ng-container *ngFor="let line of playGround.linesHorizontal">
             <line [attr.x1]="line.x1" [attr.y1]="line.y1" [attr.x2]="line.x2" [attr.y2]="line.y2" stroke="red"/>
           </ng-container>
-          <ng-container *ngFor="let line of linesVertical">
+          <ng-container *ngFor="let line of playGround.linesVertical">
             <line [attr.x1]="line.x1" [attr.y1]="line.y1" [attr.x2]="line.x2" [attr.y2]="line.y2" stroke="red"/>
+          </ng-container>
+
+        </svg>
+
+        <svg id="mysvg" style="position: absolute; width: 900px; height: 900px" (click)="this.placeMark($event)">
+          <ng-container *ngFor="let row of playGround.playField">
+            <ng-container *ngFor="let obj of row">
+
+              <circle [attr.cx]=obj.xPos [attr.cy]=obj.yPos [attr.r]="20" [attr.stroke]="obj.stroke" stroke-width="5" fill-opacity="">
+                <ng-container *ngIf="obj.win">
+                  <animate
+                    attributeName="fill"
+                    values="#cccccc;transparent"
+                    begin="0s"
+                    dur=".5s"
+                    calcMode="discrete"
+                    repeatCount="indefinite"
+                  />
+                </ng-container>
+
+              </circle>
+
+
+
+
+
+
+
+            </ng-container>
           </ng-container>
         </svg>
-      </div>
 
+
+
+      </div>
 
 
 
@@ -28,14 +65,5 @@
 
 
 
-</div>
-<svg style="width: available; height: available">
-  <ng-container *ngFor="let line of linesHorizontal">
-    <line [attr.x1]="line.x1" [attr.y1]="line.y1" [attr.x2]="line.x2" [attr.y2]="line.y2" stroke="red"/>
-  </ng-container>
-  <ng-container *ngFor="let line of linesVertical">
-    <line [attr.x1]="line.x1" [attr.y1]="line.y1" [attr.x2]="line.x2" [attr.y2]="line.y2" stroke="red"/>
-  </ng-container>
-</svg>
 
 

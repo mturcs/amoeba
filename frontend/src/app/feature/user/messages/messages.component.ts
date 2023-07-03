@@ -1,4 +1,16 @@
-import {Component, OnInit, ViewEncapsulation} from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnInit,
+  Renderer2,
+  ViewChild,
+  ViewEncapsulation
+} from "@angular/core";
+import {Grid, Placemark} from "./grid";
+import type { Pos } from "./grid";
+
 
 @Component({
   selector: "app-messages",
@@ -7,89 +19,135 @@ import {Component, OnInit, ViewEncapsulation} from "@angular/core";
   styleUrls: ["./messages.component.scss"]
 })
 export class MessagesComponent implements OnInit {
-  linesHorizontal: { x1: number, y1: number, x2: number, y2: number, stroke: string, strokeWidth: number }[];
-  linesVertical: { x1: number, y1: number, x2: number, y2: number, stroke: string, strokeWidth: number }[];
-  squareSize = 10;
-  squareCols = 10;
-  squareRows = 10;
+
+  @ViewChild("svgElement", {static: false}) svgElement!: ElementRef<SVGSVGElement>;
+
+  circleFill = "";
+  circleStroke = "";
+  cursorPosition = "";
+  markCirclePlaceX = 0;
+  markCirclePlaceY = 0;
+  player = 0;
+  placeX = false;
+  placeCircle = true;
+  pos = {x: 0, y: 0};
+  winCheckPos: Pos = { xPos: 0, yPos: 0, player: 0, };
 
 
-  generateHorizontalLines(): { x1: number, y1: number, x2: number, y2: number, stroke: string, strokeWidth: number }[] {
-    // Logic to generate the lines dynamically
-    const lines = [];
 
-    // logic to generate lines
-    for (let i = 0; i < this.squareCols   ; i++) {
-      const line = {
-        x1: this.squareSize,
-        y1: i * this.squareSize,
-        x2: this.squareCols * this.squareSize,
-        y2: i * this.squareSize,
-        stroke: "red",
-        strokeWidth: 2
-      };
-      lines.push(line);
+
+  @HostListener("window:resize") onResize = () => {
+    this.updateCursorPosition();
+  }
+
+  onMouseMove = (event: MouseEvent) => {
+    this.updateCursorPosition(event);
+  }
+
+
+  // tslint:disable-next-line:typedef
+  updateCursorPosition(event?: MouseEvent) {
+    if (!event) {
+      // Use default position when no event is provided
+      this.cursorPosition = "N/A";
+      return;
+    }
+  }
+
+
+  // tslint:disable-next-line:typedef
+    writeCursorPosition(event?: MouseEvent) {
+
+    if (!event) {
+      // Use default position when no event is provided
+      this.cursorPosition = "N/A";
+      return;
+    }
+    const svgRect = this.svgElement.nativeElement.getBoundingClientRect();
+    const offsetX = event.clientX - svgRect.left;
+    const offsetY = event.clientY - svgRect.top;
+    console.log(`Cursor Position: X: ${offsetX.toFixed(2)}, Y: ${offsetY.toFixed(2)}`);
+    console.log(`Matrix Position: X: ${Math.floor(offsetX / this.playGround.squareSize )}, Y: ${Math.floor(offsetY / this.playGround.squareSize  )}`);
+// tslint:disable-next-line:radix
+    this.pos = {x: parseInt(offsetX.toFixed(2)), y: parseInt( offsetY.toFixed(2)) };
+    return this.pos;
+
+  }
+
+  placeMark(event?: MouseEvent): void {
+
+    if (this.placeX) {
+      this.placeCircle = true;
+      this.placeX = false;
+      this.player = 1;
+      this.circleStroke = "orange";
+
+    }
+    else {
+      this.placeCircle = false;
+      this.placeX = true;
+      this.player = 2;
+      this.circleFill = "red";
+      this.circleStroke = "red";
     }
 
-    return lines;
-  }
 
-  generateVerticalLines(): { x1: number, y1: number, x2: number, y2: number, stroke: string, strokeWidth: number }[] {
-    // Logic to generate the lines dynamically
-    const lines = [];
+    if (!event) {
+        // Use default position when no event is provided
+        this.cursorPosition = "N/A";
+        return;
+      }
+    const svgRect = this.svgElement.nativeElement.getBoundingClientRect();
+    const offsetX = event.clientX - svgRect.left;
+    const offsetY = event.clientY - svgRect.top;
 
-    // logic to generate lines
-    for (let i = 0; i < this.squareRows ; i++) {
-      const line = {
-        x1: i * this.squareSize,
-        y1: this.squareSize,
-        x2: i * this.squareSize,
-        y2: this.squareRows * this.squareSize,
-        stroke: "red",
-        strokeWidth: 2
-      };
-      lines.push(line);
-    }
-
-    return lines;
-  }
-
-  /*
-  linesHorizontal = [
-    { x1: 10, y1: 10, x2: 100, y2: 10 },
-    { x1: 10, y1: 20, x2: 100, y2: 20 },
-    { x1: 10, y1: 30, x2: 100, y2: 30 },
-    { x1: 10, y1: 40, x2: 100, y2: 40 },
-    { x1: 10, y1: 50, x2: 100, y2: 50 },
-    { x1: 10, y1: 60, x2: 100, y2: 60 },
-    { x1: 10, y1: 70, x2: 100, y2: 70 },
-    { x1: 10, y1: 80, x2: 100, y2: 80 },
-    { x1: 10, y1: 90, x2: 100, y2: 90 },
-    { x1: 10, y1: 100, x2: 100, y2: 100 }
+      // tslint:disable-next-line:radix
+    this.markCirclePlaceX = Math.floor(offsetX / this.playGround.squareSize ) * this.playGround.squareSize +
+        Math.floor(this.playGround.squareSize / 2);
+    this.markCirclePlaceY = Math.floor(offsetY / this.playGround.squareSize ) * this.playGround.squareSize +
+        Math.floor(this.playGround.squareSize / 2);
 
 
-    // Add more line objects as needed
-  ];
-  linesVertical = [
-    { x1: 10, y1: 10, x2: 10, y2: 100 },
-    { x1: 20, y1: 10, x2: 20, y2: 100 },
-    { x1: 30, y1: 10, x2: 30, y2: 100 },
-    { x1: 40, y1: 10, x2: 40, y2: 100 },
-    { x1: 50, y1: 10, x2: 50, y2: 100 },
-    { x1: 60, y1: 10, x2: 60, y2: 100 },
-    { x1: 70, y1: 10, x2: 70, y2: 100 },
-    { x1: 80, y1: 10, x2: 80, y2: 100 },
-    { x1: 90, y1: 10, x2: 90, y2: 100 },
-    { x1: 100, y1: 10, x2: 100, y2: 100 }
-    // Add more line objects as needed
-  ];
-*/
-  constructor() { this.linesHorizontal = this.generateHorizontalLines();
-                  this.linesVertical = this.generateVerticalLines();
-  }
+    this.playGround.playField[Math.floor(offsetY / this.playGround.squareSize - 1 )]
+        [Math.floor(offsetX / this.playGround.squareSize  - 1 )] =
+      {value: "circle", xPos: this.markCirclePlaceX, yPos: this.markCirclePlaceY, player: this.player, win: false, stroke: this.circleStroke, tempmark: false};
 
-  ngOnInit(): void {
+    // console.log(this.playGround.playField);
+    // console.log(Math.floor(offsetY / this.playGround.squareSize - 1 ), Math.floor(offsetX / this.playGround.squareSize  - 1 ));
+
+    // this.playGround.checkWin(this.playGround.playField, 1);
+    // this.playGround.checkWin(this.playGround.playField, 2);
+    this.playGround.winscannew({ xPos : Math.floor(offsetY / this.playGround.squareSize - 1 ), yPos :
+  Math.floor(offsetX / this.playGround.squareSize  - 1 ), player : this.player}, this.playGround.playField);
 
   }
+
+
+
+
+
+  constructor(
+    public playGround: Grid
+
+
+  ) {
+  }
+
+
+
+
+
+
+  // tslint:disable-next-line:typedef
+  ngOnInit(){
+
+  }
+
 
 }
+
+
+
+
+
+

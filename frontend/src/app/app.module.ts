@@ -9,6 +9,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { SharedModule } from "./shared/shared.module";
 import { CoreModule } from "@core/core.module";
+import {Grid, Placemark} from "./feature/user/messages/grid";
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,7 +21,7 @@ import { CoreModule } from "@core/core.module";
     CoreModule.forRoot(),
     MatSlideToggleModule
   ],
-  providers: [],
+  providers: [ Grid, Placemark],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
