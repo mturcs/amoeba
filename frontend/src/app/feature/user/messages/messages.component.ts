@@ -30,8 +30,8 @@ export class MessagesComponent implements OnInit {
   player = 0;
   placeX = false;
   placeCircle = true;
-  pos = {x: 0, y: 0};
-  winCheckPos: Pos = { xPos: 0, yPos: 0, player: 0, };
+  pos = {y: 0, x: 0};
+
 
 
 
@@ -108,17 +108,22 @@ export class MessagesComponent implements OnInit {
         Math.floor(this.playGround.squareSize / 2);
 
 
-    this.playGround.playField[Math.floor(offsetY / this.playGround.squareSize - 1 )]
-        [Math.floor(offsetX / this.playGround.squareSize  - 1 )] =
+    this.playGround.playField[Math.floor(offsetX / this.playGround.squareSize - 1 )]
+        [Math.floor(offsetY / this.playGround.squareSize  - 1 )] =
       {value: "circle", xPos: this.markCirclePlaceX, yPos: this.markCirclePlaceY, player: this.player, win: false, stroke: this.circleStroke, tempmark: false};
 
-    // console.log(this.playGround.playField);
-    // console.log(Math.floor(offsetY / this.playGround.squareSize - 1 ), Math.floor(offsetX / this.playGround.squareSize  - 1 ));
+    console.log("player", this.playGround.playField);
+    // console.log("player mark", Math.floor(offsetY / this.playGround.squareSize - 1 ), Math.floor(offsetX / this.playGround.squareSize  - 1 ),
+    // this.player;);
 
     // this.playGround.checkWin(this.playGround.playField, 1);
     // this.playGround.checkWin(this.playGround.playField, 2);
-    this.playGround.winscannew({ xPos : Math.floor(offsetY / this.playGround.squareSize - 1 ), yPos :
-  Math.floor(offsetX / this.playGround.squareSize  - 1 ), player : this.player}, this.playGround.playField);
+   // this.playGround.winscannew({ xPos : Math.floor(offsetY / this.playGround.squareSize - 1 ), yPos :
+  // Math.floor(offsetY / this.playGround.squareSize  - 1 ), player : this.player}, this.playGround.playField);
+
+    // console.log(Math.floor(offsetY / this.playGround.squareSize - 1 ), Math.floor(offsetX / this.playGround.squareSize  - 1 ))
+    this.playGround.winnerscan({ yPos : Math.floor(offsetY / this.playGround.squareSize - 1 ), xPos :
+        Math.floor(offsetX / this.playGround.squareSize  - 1 ), player : this.player}, this.playGround.playField);
 
   }
 
